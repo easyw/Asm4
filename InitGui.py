@@ -27,7 +27,7 @@ import asm4wb_locator
 global asm4wb_icons_path, asm4wb_ex_path
 asm4wbPath = os.path.dirname( asm4wb_locator.__file__ )
 asm4wb_icons_path = os.path.join( asm4wbPath, 'icons')
-asm4wb_ex_path = os.path.join( asm4wbPath, 'Examples')
+asm4wb_ex_path = asm4wbPath #os.path.join( asm4wbPath, 'Examples')
 
 global main_Assembly4WB_Icon
 main_Assembly4WB_Icon = os.path.join( asm4wb_icons_path , 'Assembly4.svg' )
@@ -83,8 +83,8 @@ class Assembly4_WorkBench(Workbench):
         self.appendToolbar("Assembly 4",self.itemsToolbar) # leave settings off toolbar
         self.appendMenu("&Assembly",self.itemsMenu) # creates a new menu
         #self.appendMenu(["&Edit","DynamicData"],self.list) # appends a submenu to an existing menu
-        submenu = ['Asm4_Example1']
-        submenu1 = ['asm_Bielle.fcstd','Bague.fcstd','Bielle.fcstd','Cuve.fcstd','Screw_CHC.fcstd']
+        submenu = ['Asm4_Examples']
+        submenu1 = ['asm_Bielle.fcstd','asm_Cylinders.FCStd','asm_Hypnotic.fcstd','README.pdf']
         self.appendMenu(["&Assembly", submenu[0]],submenu1)
         #for m in submenu[1]:
         #    self.appendMenu(submenu[0], [m])
@@ -138,7 +138,11 @@ class a4Exc:
         if 'fcstd' in self.ext:
             return {'Pixmap'  : os.path.join( asm4wb_icons_path , 'FreeCad.svg') ,
                     'MenuText': str(self.exFile),
-                    'ToolTip' : "Demo files"}        
+                    'ToolTip' : "Asm4 Demo files"}        
+        elif 'pdf' in self.ext:
+            return {'Pixmap'  : os.path.join( asm4wb_icons_path , 'datasheet.svg') ,
+                    'MenuText': str(self.exFile),
+                    'ToolTip' : "Help file"}
         
     def Activated(self):
         global submenu
@@ -160,10 +164,27 @@ class a4Exc:
         nme = os.path.splitext(os.path.basename(fnameDemo))[0]
         if ext.lower()==".fcstd":
             FreeCAD.open(fnameDemo)
+        elif ext.lower()==".pdf":
+            import subprocess, sys, os
+            if sys.platform == "linux" or sys.platform == "linux2":
+                # linux
+                print("xdg-open", fnameDemo)
+                subprocess.call(["xdg-open", fnameDemo])
+                #os.execve(sys.executable, ["xdg-open", fnameDemo], os.environ)
+                #os.execv(sys.executable, ["xdg-open", fnameDemo])
+            if sys.platform == "darwin":
+                # osx
+                cmd_open = 'open '+fnameDemo
+                os.system(cmd_open) #win, osx
+            else:
+                # win
+                subprocess.Popen([fnameDemo],shell=True)
+        
         
 ##
 
-submenu1 = ['asm_Bielle.fcstd','Bague.fcstd','Bielle.fcstd','Cuve.fcstd','Screw_CHC.fcstd']
+submenu1 = ['asm_Bielle.fcstd','asm_Cylinders.FCStd','asm_Hypnotic.fcstd','README.pdf']
+        
 for curFile in submenu1:
     FreeCADGui.addCommand(curFile, a4Exc(curFile))
 
