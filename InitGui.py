@@ -169,12 +169,15 @@ class a4Exc:
             if sys.platform == "linux" or sys.platform == "linux2":
                 # linux
                 if 'LD_LIBRARY_PATH' in os.environ:
+                    my_env = os.environ
                     ldlp = os.environ['LD_LIBRARY_PATH']
-                    del os.environ['LD_LIBRARY_PATH']
-                #print("xdg-open", fnameDemo)
-                subprocess.call(["xdg-open", fnameDemo])
-                if 'LD_LIBRARY_PATH' in os.environ:
-                    os.environ['LD_LIBRARY_PATH'] = ldlp
+                    del my_env['LD_LIBRARY_PATH']
+                    #print("xdg-open", fnameDemo)
+                    subprocess.Popen(["xdg-open", fnameDemo], env=my_env)
+                else:
+                    subprocess.call(["xdg-open", fnameDemo])
+                #if 'LD_LIBRARY_PATH' in os.environ:
+                #    os.environ['LD_LIBRARY_PATH'] = ldlp
                 #os.execve(sys.executable, ["xdg-open", fnameDemo], os.environ)
                 #os.execv(sys.executable, ["xdg-open", fnameDemo])
             if sys.platform == "darwin":
