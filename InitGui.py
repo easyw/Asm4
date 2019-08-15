@@ -166,6 +166,9 @@ class a4Exc:
             FreeCAD.open(fnameDemo)
         elif ext.lower()==".pdf":
             import subprocess, sys, os
+            if 'LD_LIBRARY_PATH' in os.environ:
+                ldlp = os.environ['LD_LIBRARY_PATH']
+                del os.environ['LD_LIBRARY_PATH']
             if sys.platform == "linux" or sys.platform == "linux2":
                 # linux
                 print("xdg-open", fnameDemo)
@@ -179,7 +182,8 @@ class a4Exc:
             else:
                 # win
                 subprocess.Popen([fnameDemo],shell=True)
-        
+            if 'LD_LIBRARY_PATH' in os.environ:
+                os.environ['LD_LIBRARY_PATH'] = ldlp
         
 ##
 
