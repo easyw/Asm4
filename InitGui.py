@@ -31,7 +31,10 @@ asm4wb_ex_path = asm4wbPath #os.path.join( asm4wbPath, 'Examples')
 
 global main_Assembly4WB_Icon
 main_Assembly4WB_Icon = os.path.join( asm4wb_icons_path , 'Assembly4.svg' )
-global submenu
+global submenu, submenu1
+
+submenu = ['Asm4_Examples']
+submenu1 = ['asm_Bielle.fcstd','asm_Cylinders.FCStd','asm_Hypnotic.fcstd','asm4-test.FCStd','README.pdf']
 
 
 #def myFunc(string):
@@ -83,8 +86,8 @@ class Assembly4_WorkBench(Workbench):
         self.appendToolbar("Assembly 4",self.itemsToolbar) # leave settings off toolbar
         self.appendMenu("&Assembly",self.itemsMenu) # creates a new menu
         #self.appendMenu(["&Edit","DynamicData"],self.list) # appends a submenu to an existing menu
-        submenu = ['Asm4_Examples']
-        submenu1 = ['asm_Bielle.fcstd','asm_Cylinders.FCStd','asm_Hypnotic.fcstd','README.pdf']
+        #submenu = ['Asm4_Examples']
+        #submenu1 = ['asm_Bielle.fcstd','asm_Cylinders.FCStd','asm_Hypnotic.fcstd','asm4-test.FCStd','README.pdf']
         self.appendMenu(["&Assembly", submenu[0]],submenu1)
         #for m in submenu[1]:
         #    self.appendMenu(submenu[0], [m])
@@ -168,7 +171,7 @@ class a4Exc:
             import subprocess, sys, os
             if sys.platform == "linux" or sys.platform == "linux2":
                 # linux
-                if 'LD_LIBRARY_PATH' in os.environ:
+                if 'LD_LIBRARY_PATH' in os.environ: # workaround for AppImage
                     my_env = os.environ
                     ldlp = os.environ['LD_LIBRARY_PATH']
                     del my_env['LD_LIBRARY_PATH']
@@ -189,7 +192,6 @@ class a4Exc:
                 subprocess.Popen([fnameDemo],shell=True)
 ##
 
-submenu1 = ['asm_Bielle.fcstd','asm_Cylinders.FCStd','asm_Hypnotic.fcstd','README.pdf']
         
 for curFile in submenu1:
     FreeCADGui.addCommand(curFile, a4Exc(curFile))
